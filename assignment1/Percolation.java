@@ -10,6 +10,9 @@ public class Percolation {
     private int openSites;
     
     public Percolation(int n) {
+        if (n <= 0) {
+            throw new IllegalArgumentException("Grid size cannot be negative");
+        }
         size = n;
         grid = new boolean[n][n];
         openSites = 0;
@@ -17,9 +20,9 @@ public class Percolation {
         quickUnion = new WeightedQuickUnionUF(n*n+2); // +2 for virtual top and bottom
         
         // create virtual top and bottom
-        for (int i = 0; i < size; i++) {
+        for (int i = 1; i < size+1; i++) {
             quickUnion.union(0,i);
-            quickUnion.union(size*size+1,size*size-i);
+            quickUnion.union(size*size+1, size*size-i);
         }
         // Init to all blocked
         for (int i = 0; i < size; i++) {
@@ -34,9 +37,9 @@ public class Percolation {
             throw new IllegalArgumentException("Illegal grid size");
     }
     
-    private int xyToidx(int row,int col) {
+    private int xyToidx(int row, int col) {
         
-        validate(row,col);
+        validate(row, col);
         
         int i = row - 1; // Convert to the correct address
         int j = col - 1;
@@ -45,25 +48,27 @@ public class Percolation {
     }
     
     public    void open(int row, int col) {   
-        validate(row,col);
-        grid[row-1][col-1] = true;
-        openSites++;
-        
-        if (row != 1) { // connect to the upper element
-            if (isOpen(row-1,col))
-                quickUnion.union(xyToidx(row,col),xyToidx(row-1,col));
-        }
-        if (row != size) { // Lower
-            if (isOpen(row+1,col))
-                quickUnion.union(xyToidx(row,col),xyToidx(row+1,col));
-        }
-        if (col != 1) { // Left
-            if (isOpen(row,col-1))
-                quickUnion.union(xyToidx(row,col),xyToidx(row,col-1));
-        }
-        if (col != size) { // Right
-            if (isOpen(row,col+1))
-                quickUnion.union(xyToidx(row,col),xyToidx(row,col+1));
+        validate(row, col);
+        if (!isOpen(row, col)) {
+            grid[row-1][col-1] = true;
+            openSites++;
+            
+            if (row != 1) { // connect to the upper element
+                if (isOpen(row-1, col))
+                    quickUnion.union(xyToidx(row, col),xyToidx(row-1, col));
+            }
+            if (row != size) { // Lower
+                if (isOpen(row+1,col))
+                    quickUnion.union(xyToidx(row, col),xyToidx(row+1, col));
+            }
+            if (col != 1) { // Left
+                if (isOpen(row,col-1))
+                    quickUnion.union(xyToidx(row, col),xyToidx(row, col-1));
+            }
+            if (col != size) { // Right
+                if (isOpen(row,col+1))
+                    quickUnion.union(xyToidx(row, col),xyToidx(row, col+1));
+            }
         }
                
     }// open site (row, col) if it is not open already
@@ -76,8 +81,10 @@ public class Percolation {
     
     public boolean isFull(int row, int col) {
         // Is row, col connected to virtual top?
-        validate(row,col);
-        return quickUnion.connected(0,xyToidx(row,col));
+        validate(row, col);
+        if (!isOpen(row, col))
+            return false;
+        return quickUnion.connected(0,xyToidx(row, col));
     } // is site (row, col) full?
     
     public     int numberOfOpenSites() {
@@ -86,7 +93,7 @@ public class Percolation {
     
     public boolean percolates() {
         // Check if virtual top and bottom are connected
-        return quickUnion.connected(0,size*size+1);
+        return quickUnion.connected(0, size*size + 1);
     } // does the system percolate?
 
     // Test-method
@@ -102,7 +109,7 @@ public class Percolation {
             }
         }
         int openSites = perc.numberOfOpenSites();
-        double frac = (double)openSites/(double)(size*size);
+        double frac = (double) openSites/(double) (size*size);
         System.out.println(frac);
     }
 }
