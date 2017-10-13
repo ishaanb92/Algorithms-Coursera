@@ -19,11 +19,6 @@ public class Percolation {
         // Create data-structure for quick-union
         quickUnion = new WeightedQuickUnionUF(n*n+2); // +2 for virtual top and bottom
         
-        // create virtual top and bottom
-        for (int i = 1; i < size+1; i++) {
-            quickUnion.union(0,i);
-            quickUnion.union(size*size+1, size*size-i);
-        }
         // Init to all blocked
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++) {
@@ -32,8 +27,9 @@ public class Percolation {
         }
     } // create n-by-n grid, with all sites blocked
     
+    
     private void validate(int row, int col) {
-        if (row < 1 || row > size || col < 1 || col > size)
+        if (row < 1 | row > size | col < 1 | col > size)
             throw new IllegalArgumentException("Illegal grid size");
     }
     
@@ -52,6 +48,13 @@ public class Percolation {
         if (!isOpen(row, col)) {
             grid[row-1][col-1] = true;
             openSites++;
+            if (row == 1) {
+                quickUnion.union(0,xyToidx(row,col)); // Connect the open site to V-top
+            }
+            
+            if (row == size) {
+                quickUnion.union(size*size+1,xyToidx(row,col)); // Connect open site to V-Bottom
+            }
             
             if (row != 1) { // connect to the upper element
                 if (isOpen(row-1, col))
