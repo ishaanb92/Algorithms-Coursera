@@ -29,7 +29,7 @@ public class Percolation {
     
     
     private void validate(int row, int col) {
-        if (row < 1 | row > size | col < 1 | col > size)
+        if (row < 1 || row > size || col < 1 || col > size)
             throw new IllegalArgumentException("Illegal grid size");
     }
     
