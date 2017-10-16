@@ -24,9 +24,7 @@ public class Deque<Item> implements Iterable<Item> {
    
     
     public boolean isEmpty() {
-        if (first == null && last == null)
-            return true;
-        return false;
+        return (size==0);
     } // is the deque empty?
     
     public int size() {
@@ -160,6 +158,7 @@ public class Deque<Item> implements Iterable<Item> {
         System.out.println("Last element " + last);
         last = deq.removeLast();
         System.out.println("First element " + last);
+        deq.addFirst(1);
         for (int elem : deq) {
             System.out.println(elem);
         }
