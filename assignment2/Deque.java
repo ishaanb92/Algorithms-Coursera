@@ -34,24 +34,50 @@ public class Deque<Item> implements Iterable<Item> {
     } // return the number of items on the deque
     
     public void addFirst(Item item) {
-        Node oldFirst = first;
-        first.item = item;
-        // Update the links
-        first.next = oldFirst; 
-        oldFirst.prev = first;
-        first.prev = null;
-        size++;
+        if (!isEmpty()) {
+            Node newNode = new Node();
+            Node oldFirst = first;
+            newNode.item = item;
+            // Update the links
+            newNode.next = oldFirst; 
+            oldFirst.prev = newNode;
+            newNode.prev = null;
+            first = newNode;
+            size++;
+            System.out.println("Adding " + first.item + " size = " + size); 
+        }
+        else { // Adding to an empty deque
+            first = new Node();
+            first.item = item;
+            first.next = null;
+            first.prev = null;
+            last = first;
+            size++;
+            System.out.println("Adding " + first.item + " size = " + size); 
+        }
         
     } // add the item to the front
     
     public void addLast(Item item) {
-        Node oldLast = last;
-        last.item = item;
-        // Update links in the list
-        last.next = null;
-        oldLast.next = last;
-        last.prev = oldLast;
-        size++;
+        if (!isEmpty()) {
+            Node newNode = new Node();
+            Node oldLast = last;
+            newNode.item = item;
+            // Update links in the list
+            newNode.next = null;
+            oldLast.next = newNode;
+            newNode.prev = oldLast;
+            last = newNode;
+            size++;
+        }
+        else {
+            last = new Node();
+            last.item = item;
+            last.next = null;
+            last.prev = null;
+            first = last;
+            size++;
+        }
     } // add the item to the end
     
     public Item removeFirst() {
@@ -98,6 +124,17 @@ public class Deque<Item> implements Iterable<Item> {
             Item item = current.item;
             current = current.next;
             return item;
+        }
+    }
+    
+    public static void main(String[] args) { // Unit-test
+        Deque<Integer> deq = new Deque<Integer>();
+        deq.addFirst(1);
+        deq.addFirst(2);
+        deq.addFirst(10);
+        deq.addLast(100);
+        for (int elem : deq) {
+            System.out.println(elem);
         }
     }
 }
