@@ -2,6 +2,7 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 import java.util.Iterator;
 
+
 // API for a data-structure that supports addition
 // and deletion from the "front" and "back"
 public class Deque<Item> implements Iterable<Item> {
@@ -34,6 +35,8 @@ public class Deque<Item> implements Iterable<Item> {
     } // return the number of items on the deque
     
     public void addFirst(Item item) {
+        if (item == null) 
+            throw new java.lang.IllegalArgumentException("Cannot add a NULL item");
         if (!isEmpty()) {
             Node newNode = new Node();
             Node oldFirst = first;
@@ -59,6 +62,9 @@ public class Deque<Item> implements Iterable<Item> {
     } // add the item to the front
     
     public void addLast(Item item) {
+        if (item == null) 
+            throw new java.lang.IllegalArgumentException("Cannot add a NULL item");
+        
         if (!isEmpty()) {
             Node newNode = new Node();
             Node oldLast = last;
@@ -69,6 +75,7 @@ public class Deque<Item> implements Iterable<Item> {
             newNode.prev = oldLast;
             last = newNode;
             size++;
+            System.out.println("Adding " + last.item + " size = " + size); 
         }
         else {
             last = new Node();
@@ -77,31 +84,48 @@ public class Deque<Item> implements Iterable<Item> {
             last.prev = null;
             first = last;
             size++;
+            System.out.println("Adding " + last.item + " size = " + size); 
         }
     } // add the item to the end
     
     public Item removeFirst() {
         if (!isEmpty()) {
+            if (size == 1) {
+                Item item = first.item;
+                first = null;
+                last = null;
+                size--;
+                return item;
+            }
             Node oldFirst = first;
             first = oldFirst.next;
             first.prev = null;
             size--;
             return oldFirst.item;
         }
-        else
-            return null;
+        else {
+            throw new java.util.NoSuchElementException("The deque is empty");
+        }
     } // remove and return the item from the front
     
     public Item removeLast() {
         if (!isEmpty()) {
+            if (size == 1) {
+                Item item = last.item;
+                last = null;
+                first = null;
+                size--;
+                return item;
+            }
             Node oldLast = last;
             last = oldLast.prev;
             last.next = null;
             size--;
             return oldLast.item;
         }
-        else
-            return null;
+        else {
+            throw new java.util.NoSuchElementException("The deque is empty");
+        }
     } // remove and return the item from the end
     
     public Iterator<Item> iterator() {
@@ -117,7 +141,7 @@ public class Deque<Item> implements Iterable<Item> {
         }
         
         public void remove() {
-            // do nothing
+            throw new java.lang.UnsupportedOperationException("remove() operation is not supported");
         }
         
         public Item next() {
@@ -133,6 +157,12 @@ public class Deque<Item> implements Iterable<Item> {
         deq.addFirst(2);
         deq.addFirst(10);
         deq.addLast(100);
+        deq.removeLast();
+        deq.removeLast();
+        int last = deq.removeFirst();
+        System.out.println("Last element " + last);
+        last = deq.removeLast();
+        System.out.println("First element " + last);
         for (int elem : deq) {
             System.out.println(elem);
         }
