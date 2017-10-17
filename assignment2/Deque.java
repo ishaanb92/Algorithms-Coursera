@@ -132,7 +132,7 @@ public class Deque<Item> implements Iterable<Item> {
         
         private Node current;
         
-        public LisIterator() {
+        public ListIterator() {
             
             current = first;
         }
