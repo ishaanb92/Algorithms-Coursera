@@ -129,7 +129,13 @@ public class Deque<Item> implements Iterable<Item> {
     
     // Implement the Iterable interface
     private class ListIterator implements Iterator<Item> {
-        private Node current = first;
+        
+        private Node current;
+        
+        public LisIterator() {
+            
+            current = first;
+        }
         
         public boolean hasNext() { 
             return current != null;
