@@ -66,9 +66,9 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             itemsLeft = size;
             tempArray = (Item []) new Object[size];
             for (int i = 0; i < size; i++) {
-                tempArray[i] = array[i];
+                tempArray[i] = array[i]; // Get rid of the "null" elements
             }
-            StdRandom.shuffle(tempArray); // Get rid of the "null" elements
+            StdRandom.shuffle(tempArray); 
         }
         
         public boolean hasNext() {return (itemsLeft>0);}
@@ -86,6 +86,14 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     
     public static void main(String[] args) {
         RandomizedQueue<Integer> randQ = new RandomizedQueue<Integer>();
+        randQ.enqueue(1);
+        randQ.enqueue(2);
+        randQ.enqueue(3);
+        for (int elem : randQ)
+            System.out.println(elem);
+        randQ.dequeue();
+        randQ.dequeue();
+        randQ.dequeue();
         randQ.enqueue(1);
         randQ.enqueue(2);
         randQ.enqueue(3);
