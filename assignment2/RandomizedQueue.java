@@ -27,12 +27,12 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     } // add the item
     
     public Item dequeue() {
-        if (size == 0) throw new java.util.NoSuchElementException("Trying to remove from an empty queue");
+        if (isEmpty()) throw new java.util.NoSuchElementException("Trying to remove from an empty queue");
         int r = StdRandom.uniform(size); // Pick a random index
         Item item = array[r];
         array[r] = array[size-1]; // copy last element into "empty" spot
-        array[size-1] = null; 
-        size--;
+        array[--size] = null; 
+        if (size == array.length/4) resize(array.length/2);
         return item;
     } // remove and return a random item
     
@@ -59,11 +59,16 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     
     private class RandomizedQueueIterator implements Iterator<Item> {
         
-        private int itemsLeft; 
+        private int itemsLeft;
+        private Item[] tempArray;
         
         public RandomizedQueueIterator() { // ctor
             itemsLeft = size;
-            StdRandom.shuffle(array); // Shuffle the array [linear time]
+            tempArray = (Item []) new Object[size];
+            for (int i = 0; i < size; i++) {
+                tempArray[i] = array[i];
+            }
+            StdRandom.shuffle(tempArray); // Get rid of the "null" elements
         }
         
         public boolean hasNext() {return (itemsLeft>0);}
@@ -72,12 +77,20 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         
         public Item next() {
             if (!hasNext()) throw new java.util.NoSuchElementException("All elements have been iterated over");
-            return array[--itemsLeft];
+            Item item  = tempArray[itemsLeft - 1];
+            itemsLeft--;
+            return item;
         }
         
     }
     
     public static void main(String[] args) {
+        RandomizedQueue<Integer> randQ = new RandomizedQueue<Integer>();
+        randQ.enqueue(1);
+        randQ.enqueue(2);
+        randQ.enqueue(3);
+        for (int elem : randQ)
+            System.out.println(elem);
     } // unit testing (optional)
     
 }
