@@ -43,7 +43,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return item;
     } // return a random item (but do not remove it)
     
-    public void resize(int capacity) {
+    private void resize(int capacity) {
         
         Item[] temp = (Item []) new Object[capacity];
         for (int i = 0; i < size; i++) {
