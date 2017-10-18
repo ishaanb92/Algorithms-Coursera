@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
+import edu.princeton.cs.algs4.StdIn;
 
 public class Permutation {
     
@@ -8,11 +9,10 @@ public class Permutation {
         int k = Integer.parseInt(args[0]);
         RandomizedQueue<String> randQ = new RandomizedQueue<String>();
        
-// Read in the strings, push each string into a randomized queue
-        for (int i = 1; i < args.length; i++) {
-            randQ.enqueue(args[i]);
+        while (!StdIn.isEmpty()) {
+            String s = StdIn.readString();
+            randQ.enqueue(s);
         }
-        
         for (int j = 0; j < k; j++) {
             System.out.println(randQ.dequeue());
         }

@@ -22,6 +22,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     } // return the number of items on the randomized queue
     
     public void enqueue(Item item) {
+        if (item == null) throw new java.lang.IllegalArgumentException();
         if (size == array.length) resize(array.length*2); // double the size
         array[size++] = item;
     } // add the item
