@@ -1,0 +1,84 @@
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.StdDraw;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+
+public class BruteCollinearPoints {
+    
+    private Point[] points;
+    private int numSegments;
+    private LineSegment[] lines;
+    private List<LineSegment> linesList;
+    private Point[] sortedPoints;
+    
+    
+    public BruteCollinearPoints(Point[] points) {
+        if (points == null) {
+            throw new java.lang.IllegalArgumentException("Points array is null");
+        }
+        this.points = points;
+        checkConditions();
+        this.linesList = new ArrayList<LineSegment>();
+        // Sort the points
+        sortedPoints = this.points.clone();
+        Arrays.sort(sortedPoints);
+    
+    } // finds all line segments containing 4 points
+    
+    public int numberOfSegments() {
+        return linesList.size();
+    
+    } // the number of line segments
+    
+    public LineSegment[] segments() {
+        lines = new LineSegment[linesList.size()];
+        lines = linesList.toArray(lines);
+        return lines;
+    
+    } // the line segments
+    
+    private boolean isLine(Point p1, Point p2) { // p1-p4 lie on a line
+        return (p1.slopeTo(p2) == p2.slopeTo(p2));
+    }
+    
+    private void createLines(Point[] points) {
+        for (int i = 0; i < sortedPoints.length; i++) {
+            Point p1 = sortedPoints[i];
+            for (int j = i+1; j < sortedPoints.length; j++) {
+                Point p2 = sortedPoints[j];
+                if (isLine(p1,p2)) {
+                    for (int k = j+1; k < sortedPoints.length;k++) {
+                        Point p3 = sortedPoints[k];
+                        if (isLine(p1,p3)) {
+                            for (int l = k+1; k < sortedPoints.length; k++) {
+                                Point p4 = sortedPoints[l];
+                                if (isLine(p1,p4)) {
+                                    linesList.add(new LineSegment(p1,p4));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    private void checkConditions() {
+        // Check if any point is null
+        for (int i = 0; i < this.points.length; i++) {
+            if (this.points[i] == null)
+                throw new java.lang.IllegalArgumentException();
+        }
+        
+        for (int i = 0; i < this.points.length; i++) {
+            for (int j = i+1; j < this.points.length;j++ ) {
+                if (this.points[i].compareTo(this.points[j]) == 0)
+                    throw new java.lang.IllegalArgumentException();          
+            }
+        }
+    }
+
+
+}

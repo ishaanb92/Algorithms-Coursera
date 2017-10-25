@@ -19,8 +19,6 @@ public class MergeSort {
     }
     
     private static boolean less(Comparable v,Comparable w) {
-        //System.out.println("Comparing " + v + " and " + w);
-        //System.out.println(v.compareTo(w));
         return v.compareTo(w) < 0;
     }
     
