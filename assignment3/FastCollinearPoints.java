@@ -20,8 +20,8 @@ public class FastCollinearPoints {
         this.linesList = new ArrayList<LineSegment>();
         // Sort the points
         sortedPoints = this.points.clone();
-        // Sort based on x-y co-ordinates
-        //Arrays.sort(sortedPoints);
+        // Sort based on x-y co-ordinates (natural order)
+        Arrays.sort(sortedPoints);
         
     } // finds all line segments containing 4 or more points
     public int numberOfSegments() {
@@ -38,27 +38,28 @@ public class FastCollinearPoints {
     
     private void findLines() { // order of n^2 * lgN number of compares
         double slope1,slope2,slope3;
-        int j=1,count=0,k;
+        int count=0,j,k;
         for (int i = 0; i < N; i++) {
-            // Sort the points ahead of points[i] by the slope they make with points[i]
             Point[] aux = sortedPoints.clone();
-            Arrays.sort(aux,aux[i].slopeOrder());
+            System.out.println("Original Array : "+Arrays.toString(aux));
+            Arrays.sort(aux,sortedPoints[i].slopeOrder());
+            Point origin = aux[0];
+            System.out.println("Re-sorted array : " + Arrays.toString(aux));
             j = 1;
-            count = 0;
-            for (j = 1 ; j < N; j++) {
-                if (count != 0)
-                    j += count;
+            while(j < N-1) {
+                System.out.println("Origin : "+origin.toString()+" Point considered : "+aux[j]);
                 k = j+1;
-                count = 0;
-                while(k < N-1 && j < N) {
-                    if (aux[i].slopeTo(aux[j]) != aux[i].slopeTo(aux[k]))
-                        break;
+                while(origin.slopeTo(aux[j]) == origin.slopeTo(aux[k])) {
                     k++;
-                    count++;
-                }                
-                if (count>=2) {
-                    linesList.add(new LineSegment(aux[i],aux[j]));
+                    if (k>N-1)
+                        break;
                 }
+                if (k-j>=3 && k <= N-1) {
+                    linesList.add(new LineSegment(origin,aux[k-1]));
+                    System.out.println(origin.toString() + aux[j].toString() + aux[k-1].toString() + " are collinear");
+                }
+
+                j = k;                
             }
         }
          
