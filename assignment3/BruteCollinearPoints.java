@@ -53,10 +53,10 @@ public class BruteCollinearPoints {
                 if (isLine(p1,p2)) {
                     for (int k = j+1; k < this.sortedPoints.length;k++) {
                         Point p3 = sortedPoints[k];
-                        if (isLine(p1,p3)) {
+                        if (isLine(p2,p3)) {
                             for (int l = k+1; k < this.sortedPoints.length; k++) {
                                 Point p4 = this.sortedPoints[l];
-                                if (isLine(p1,p4)) {
+                                if (isLine(p3,p4)) {
                                     linesList.add(new LineSegment(p1,p4));
                                 }
                             }
@@ -80,6 +80,36 @@ public class BruteCollinearPoints {
                     throw new java.lang.IllegalArgumentException();          
             }
         }
+    }
+    
+    public static void main(String[] args) {
+
+        // read the n points from a file
+        In in = new In(args[0]);
+        int n = in.readInt();
+        Point[] points = new Point[n];
+        for (int i = 0; i < n; i++) {
+            int x = in.readInt();
+            int y = in.readInt();
+            points[i] = new Point(x, y);
+        }
+
+        // draw the points
+        StdDraw.enableDoubleBuffering();
+        StdDraw.setXscale(0, 32768);
+        StdDraw.setYscale(0, 32768);
+        for (Point p : points) {
+            p.draw();
+        }
+        StdDraw.show();
+
+        // print and draw the line segments
+        BruteCollinearPoints collinear = new BruteCollinearPoints(points);
+        for (LineSegment segment : collinear.segments()) {
+            StdOut.println(segment);
+            segment.draw();
+        }
+        StdDraw.show();
     }
 
 

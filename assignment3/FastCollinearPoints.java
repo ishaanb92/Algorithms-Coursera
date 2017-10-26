@@ -21,7 +21,7 @@ public class FastCollinearPoints {
         // Sort the points
         sortedPoints = this.points.clone();
         // Sort based on x-y co-ordinates
-        Arrays.sort(sortedPoints);
+        //Arrays.sort(sortedPoints);
         
     } // finds all line segments containing 4 or more points
     public int numberOfSegments() {
@@ -38,33 +38,30 @@ public class FastCollinearPoints {
     
     private void findLines() { // order of n^2 * lgN number of compares
         double slope1,slope2,slope3;
-        int k,count;
-        for (int i = 0; i < N-1; i++) {
-            // Sort the points ahead of points[i] by the slope they make with points[i] 
-            Arrays.sort(sortedPoints,i+1,N-1,sortedPoints[i].slopeOrder());
-            for (int j = i+1; j < N-1; j ++) {
+        int j=1,count=0,k;
+        for (int i = 0; i < N; i++) {
+            // Sort the points ahead of points[i] by the slope they make with points[i]
+            Point[] aux = sortedPoints.clone();
+            Arrays.sort(aux,aux[i].slopeOrder());
+            j = 1;
+            count = 0;
+            for (j = 1 ; j < N; j++) {
+                if (count != 0)
+                    j += count;
                 k = j+1;
-                count = 0; // Keeps a count a number of collinear points found with i
-                while(sortedPoints[i].slopeTo(sortedPoints[j]) != sortedPoints[i].slopeTo(sortedPoints[k])) { // Keep looking ahead
+                count = 0;
+                while(k < N-1 && j < N) {
+                    if (aux[i].slopeTo(aux[j]) != aux[i].slopeTo(aux[k]))
+                        break;
                     k++;
                     count++;
-                    if (k >= N-1)
-                        break;
+                }                
+                if (count>=2) {
+                    linesList.add(new LineSegment(aux[i],aux[j]));
                 }
-                if (count >= 2) {
-                    linesList.add(new LineSegment(sortedPoints[i],sortedPoints[k]));
-                }
-                
-                /*slope1 = sortedPoints[i].slopeTo(sortedPoints[j]);
-                slope2 = sortedPoints[i].slopeTo(sortedPoints[j+1]);
-                slope3 = sortedPoints[i].slopeTo(sortedPoints[j+2]);
-                if ((slope1 == slope2) && (slope2 == slope3)) {
-                    // i->(j+2) is a line segment
-                    linesList.add(new LineSegment(sortedPoints[i],sortedPoints[j+2]));
-                }*/       
             }
         }
-        
+         
     } // Sorting based approach to find lines
     
     private void checkConditions() {
