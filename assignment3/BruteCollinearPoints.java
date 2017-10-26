@@ -23,19 +23,18 @@ public class BruteCollinearPoints {
         // Sort the points
         sortedPoints = this.points.clone();
         Arrays.sort(sortedPoints);
+        findLines();
+        lines = new LineSegment[linesList.size()];
+        lines = linesList.toArray(lines);
     
     } // finds all line segments containing 4 points
     
     public int numberOfSegments() {
-        return linesList.size();
+        return lines.length;
     
     } // the number of line segments
     
     public LineSegment[] segments() {
-        
-        findLines();
-        lines = new LineSegment[linesList.size()];
-        lines = linesList.toArray(lines);
         return lines;
     
     } // the line segments

@@ -22,6 +22,9 @@ public class FastCollinearPoints {
         sortedPoints = this.points.clone();
         // Sort based on x-y co-ordinates (natural order)
         Arrays.sort(sortedPoints);
+        findLines();
+        lines = new LineSegment[linesList.size()];
+        lines = linesList.toArray(lines);
         
     } // finds all line segments containing 4 or more points
     public int numberOfSegments() {
@@ -29,9 +32,6 @@ public class FastCollinearPoints {
         
     } // the number of line segments
     public LineSegment[] segments() {
-        findLines();
-        lines = new LineSegment[linesList.size()];
-        lines = linesList.toArray(lines);
         return lines;
         
     } // the line segments
@@ -41,22 +41,20 @@ public class FastCollinearPoints {
         int count=0,j,k;
         for (int i = 0; i < N; i++) {
             Point[] aux = sortedPoints.clone();
-            System.out.println("Original Array : "+Arrays.toString(aux));
             Arrays.sort(aux,sortedPoints[i].slopeOrder());
             Point origin = aux[0];
-            System.out.println("Re-sorted array : " + Arrays.toString(aux));
             j = 1;
             while(j < N-1) {
-                System.out.println("Origin : "+origin.toString()+" Point considered : "+aux[j]);
                 k = j+1;
                 while(origin.slopeTo(aux[j]) == origin.slopeTo(aux[k])) {
                     k++;
                     if (k>N-1)
                         break;
                 }
-                if (k-j>=3 && k <= N-1) {
-                    linesList.add(new LineSegment(origin,aux[k-1]));
-                    System.out.println(origin.toString() + aux[j].toString() + aux[k-1].toString() + " are collinear");
+                if (k-j>=3 && k <= N) {
+                    if (aux[k-1].compareTo(origin) > 0 && aux[j].compareTo(origin) > 0) { // Both should be "above"
+                        linesList.add(new LineSegment(origin,aux[k-1]));
+                    }
                 }
 
                 j = k;                
