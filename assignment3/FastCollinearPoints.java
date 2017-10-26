@@ -5,75 +5,70 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BruteCollinearPoints {
+public class FastCollinearPoints {
     
     private Point[] points;
     private LineSegment[] lines;
     private List<LineSegment> linesList;
     private Point[] sortedPoints;
+    private int N;
     
-    
-    public BruteCollinearPoints(Point[] points) {
-        if (points == null) {
-            throw new java.lang.IllegalArgumentException("Points array is null");
-        }
+    public FastCollinearPoints(Point[] points) {
         this.points = points;
         checkConditions();
+        N = points.length;
         this.linesList = new ArrayList<LineSegment>();
         // Sort the points
         sortedPoints = this.points.clone();
+        // Sort based on x-y co-ordinates
         Arrays.sort(sortedPoints);
-    
-    } // finds all line segments containing 4 points
-    
-    public int numberOfSegments() {
-        return linesList.size();
-    
-    } // the number of line segments
-    
-    public LineSegment[] segments() {
         
+    } // finds all line segments containing 4 or more points
+    public int numberOfSegments() {
+        return lines.length;
+        
+    } // the number of line segments
+    public LineSegment[] segments() {
         findLines();
         lines = new LineSegment[linesList.size()];
         lines = linesList.toArray(lines);
         return lines;
-    
+        
     } // the line segments
     
-    private boolean isLine(Point p1, Point p2) { // p1-p4 lie on a line
-        return (p1.slopeTo(p2) == p2.slopeTo(p2));
-    }
-    
-    private void findLines() {
-        
-        for (int i = 0; i < this.sortedPoints.length; i++) {
-            Point p1 = sortedPoints[i];
-            for (int j = i+1; j < this.sortedPoints.length; j++) {
-                Point p2 = this.sortedPoints[j];
-                if (isLine(p1,p2)) {
-                    for (int k = j+1; k < this.sortedPoints.length;k++) {
-                        Point p3 = sortedPoints[k];
-                        if (isLine(p1,p3)) {
-                            for (int l = k+1; k < this.sortedPoints.length; k++) {
-                                Point p4 = this.sortedPoints[l];
-                                if (isLine(p1,p4)) {
-                                    linesList.add(new LineSegment(p1,p4));
-                                }
-                            }
-                        }
-                    }
+    private void findLines() { // order of n^2 * lgN number of compares
+        double slope1,slope2,slope3;
+        for (int i = 0; i < N; i++) {
+            // Sort the points ahead of points[i] by the slope they make with points[i] 
+            Arrays.sort(sortedPoints,i+1,N-1,sortedPoints[i].slopeOrder());
+            for (int j = i+1; j < N; j++) {
+                slope1 = sortedPoints[i].slopeTo(sortedPoints[j]);
+                slope2 = sortedPoints[i].slopeTo(sortedPoints[j+1]);
+                slope3 = sortedPoints[i].slopeTo(sortedPoints[j+2]);
+                if ((slope1 == slope2) && (slope2 == slope3)) {
+                    // i->(j+2) is a line segment
+                    linesList.add(new LineSegment(sortedPoints[i],sortedPoints[j+2]));
                 }
+                
+                
             }
         }
-    }
+        
+    } // Sorting based approach to find lines
     
     private void checkConditions() {
+        
+        // Check if points array is null
+        if (this.points == null) {
+            throw new java.lang.IllegalArgumentException();
+        }
         // Check if any point is null
         for (int i = 0; i < this.points.length; i++) {
             if (this.points[i] == null)
                 throw new java.lang.IllegalArgumentException();
         }
         
+        // Check if any 2 distinct points are identical
         for (int i = 0; i < this.points.length; i++) {
             for (int j = i+1; j < this.points.length;j++ ) {
                 if (this.points[i].compareTo(this.points[j]) == 0)
@@ -81,6 +76,4 @@ public class BruteCollinearPoints {
             }
         }
     }
-
-
 }
