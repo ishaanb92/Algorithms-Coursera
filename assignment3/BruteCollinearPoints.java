@@ -41,20 +41,22 @@ public class BruteCollinearPoints {
     } // the line segments
     
     private boolean isLine(Point p1, Point p2,Point p3) {
-        return (p1.slopeTo(p2) == p2.slopeTo(p3));
+        return (p2.slopeTo(p1) == p3.slopeTo(p2));
     }
     
     private void findLines() {
         
+        int count = 0;
         for (int i = 0; i < this.sortedPoints.length; i++) {
-            Point p1 = sortedPoints[i];
+            count = 0;
+            Point p1 = this.sortedPoints[i];
             for (int j = i+1; j < this.sortedPoints.length; j++) {
                 Point p2 = this.sortedPoints[j];
                 for (int k = j+1; k < this.sortedPoints.length;k++) {
                     Point p3 = this.sortedPoints[k];
                     if (isLine(p1,p2,p3)) {
                         for (int l = k+1; l < this.sortedPoints.length; l++) {
-                            Point p4 = sortedPoints[l];
+                            Point p4 = this.sortedPoints[l];
                             if (isLine(p2,p3,p4)) {
                                 linesList.add(new LineSegment(p1,p4));
                             }
