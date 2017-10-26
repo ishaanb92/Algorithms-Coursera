@@ -40,8 +40,8 @@ public class BruteCollinearPoints {
     
     } // the line segments
     
-    private boolean isLine(Point p1, Point p2) { // p1-p4 lie on a line
-        return (p1.slopeTo(p2) == p2.slopeTo(p2));
+    private boolean isLine(Point p1, Point p2,Point p3) {
+        return (p1.slopeTo(p2) == p2.slopeTo(p3));
     }
     
     private void findLines() {
@@ -50,15 +50,13 @@ public class BruteCollinearPoints {
             Point p1 = sortedPoints[i];
             for (int j = i+1; j < this.sortedPoints.length; j++) {
                 Point p2 = this.sortedPoints[j];
-                if (isLine(p1,p2)) {
-                    for (int k = j+1; k < this.sortedPoints.length;k++) {
-                        Point p3 = sortedPoints[k];
-                        if (isLine(p2,p3)) {
-                            for (int l = k+1; k < this.sortedPoints.length; k++) {
-                                Point p4 = this.sortedPoints[l];
-                                if (isLine(p3,p4)) {
-                                    linesList.add(new LineSegment(p1,p4));
-                                }
+                for (int k = j+1; k < this.sortedPoints.length;k++) {
+                    Point p3 = this.sortedPoints[k];
+                    if (isLine(p1,p2,p3)) {
+                        for (int l = k+1; l < this.sortedPoints.length; l++) {
+                            Point p4 = sortedPoints[l];
+                            if (isLine(p2,p3,p4)) {
+                                linesList.add(new LineSegment(p1,p4));
                             }
                         }
                     }
