@@ -35,6 +35,7 @@ public class Solver {
         MinPQ<Node> pq2 = new MinPQ<Node>();
         pq.insert(new Node(initial,0,null));
         pq2.insert(new Node(initial.twin(),0,null));
+        
         while(true) {
             
             Node temp = pq.delMin();
@@ -53,7 +54,7 @@ public class Solver {
             
             // If its not the solution, we continue looking by generating neighbors
             for (Board b : temp.board.neighbors()) {
-                if (b != null || !b.equals(temp.pred)) {
+                if (b != null || !b.equals(temp.pred.board)) {
                     pq.insert(new Node(b,temp.moves+1,temp));
                 }
             }
@@ -68,7 +69,7 @@ public class Solver {
             }
             
             for (Board b : temp2.board.neighbors()) {
-                if (b != null || !b.equals(temp2.pred)) {
+                if (b != null || !b.equals(temp2.pred.board)) {
                     pq2.insert(new Node(b,temp2.moves+1,temp2));
                 }
             }

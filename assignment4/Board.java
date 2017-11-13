@@ -78,6 +78,7 @@ public class Board {
         }
         
         Board twinB = new Board(twin);
+        
         if (twin[0][0] != 0 && twin[0][1] != 0) 
             twinB.swap(0,0,0,1);
         else
