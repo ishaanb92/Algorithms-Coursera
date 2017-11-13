@@ -51,12 +51,18 @@ public class Solver {
                 }
                 break;
             }
+          
             
             // If its not the solution, we continue looking by generating neighbors
             for (Board b : temp.board.neighbors()) {
-                if (!b.equals(temp.pred.board)) {
+                if (temp.pred == null) { // No preds so insert
                     pq.insert(new Node(b,temp.moves+1,temp));
                 }
+                else { // Check before inserting
+                    if (!b.equals(temp.pred.board))
+                        pq.insert(new Node(b,temp.moves+1,temp));
+                }
+                
             }
             
             // Check solution for twin
@@ -69,9 +75,12 @@ public class Solver {
             }
             
             for (Board b : temp2.board.neighbors()) {
-                if (!b.equals(temp2.pred.board)) {
-                    pq2.insert(new Node(b,temp2.moves+1,temp2));
-                }
+               if (temp2.pred == null)
+                   pq2.insert(new Node(b,temp2.moves+1,temp2));
+               else {
+                   if (!b.equals(temp.pred.board))
+                       pq2.insert(new Node(b,temp2.moves+1,temp2));
+               }
             }
         }
        
