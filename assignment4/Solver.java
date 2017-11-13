@@ -28,19 +28,26 @@ public class Solver {
         }     
     }
     public Solver(Board initial) {
+        if (initial == null) 
+            throw new java.lang.IllegalArgumentException();
+        
         MinPQ<Node> pq = new MinPQ<Node>();
         MinPQ<Node> pq2 = new MinPQ<Node>();
         pq.insert(new Node(initial,0,null));
         pq2.insert(new Node(initial.twin(),0,null));
-        this.solution = new ArrayList<Board>();
         while(true) {
             
             Node temp = pq.delMin();
             // Add this to the solution path
-            solution.add(temp.board);
             if (temp.board.isGoal()) {
                 this.isSolvable = true;
                 this.moves = temp.moves;
+                this.solution = new ArrayList<Board>();
+                
+                while(temp != null) {
+                    solution.add(0,temp.board); // Add from front of the list
+                    temp = temp.pred;
+                }
                 break;
             }
             
@@ -56,6 +63,7 @@ public class Solver {
             if (temp2.board.isGoal()) {
                 this.isSolvable = false;
                 this.moves = -1;
+                this.solution = null;
                 break;
             }
             
@@ -69,7 +77,7 @@ public class Solver {
         
     } // find a solution to the initial board (using the A* algorithm)
     public boolean isSolvable() {
-        return isSolvable;
+        return this.isSolvable;
     } // is the initial board solvable?
     public int moves() {
         return this.moves;

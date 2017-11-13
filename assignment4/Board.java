@@ -9,6 +9,9 @@ public class Board {
     
     public Board(int[][] blocks) {
         
+        if (blocks == null)
+            throw new java.lang.IllegalArgumentException();
+        
         this.dim = blocks.length;
         this.blocks = new int[this.dim][this.dim];
         for (int i = 0; i < this.dim; i++) {
@@ -67,6 +70,7 @@ public class Board {
     
     public Board twin() {
         int [][] twin =  new int[dim][dim];
+        
         for (int i = 0; i < dim; i++) {
             for (int j = 0 ;j < dim; j++) {
                 twin[i][j] = this.blocks[i][j];
