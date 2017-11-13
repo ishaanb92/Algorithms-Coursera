@@ -20,7 +20,7 @@ public class Solver {
             this.board = b;
             this.moves = moves;
             this.pred = pred;
-            this.manDist = board.manhattan();
+            this.manDist = this.board.manhattan();
         }
         
         public int compareTo(Node that) {
@@ -54,7 +54,7 @@ public class Solver {
             
             // If its not the solution, we continue looking by generating neighbors
             for (Board b : temp.board.neighbors()) {
-                if (b != null || !b.equals(temp.pred.board)) {
+                if (!b.equals(temp.pred.board)) {
                     pq.insert(new Node(b,temp.moves+1,temp));
                 }
             }
@@ -69,7 +69,7 @@ public class Solver {
             }
             
             for (Board b : temp2.board.neighbors()) {
-                if (b != null || !b.equals(temp2.pred.board)) {
+                if (!b.equals(temp2.pred.board)) {
                     pq2.insert(new Node(b,temp2.moves+1,temp2));
                 }
             }
