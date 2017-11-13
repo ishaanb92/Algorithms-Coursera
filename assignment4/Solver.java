@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
+import edu.princeton.cs.algs4.StdOut;
 import java.util.ArrayList;
 
 public class Solver {
@@ -43,8 +44,8 @@ public class Solver {
                 break;
             }
             
-            // If its not the solution, we continue looking by generating neighbours
-            for (Board b : temp.board.neighbours()) {
+            // If its not the solution, we continue looking by generating neighbors
+            for (Board b : temp.board.neighbors()) {
                 if (b != null || !b.equals(temp.pred)) {
                     pq.insert(new Node(b,temp.moves+1,temp));
                 }
@@ -58,7 +59,7 @@ public class Solver {
                 break;
             }
             
-            for (Board b : temp2.board.neighbours()) {
+            for (Board b : temp2.board.neighbors()) {
                 if (b != null || !b.equals(temp2.pred)) {
                     pq2.insert(new Node(b,temp2.moves+1,temp2));
                 }
@@ -77,6 +78,27 @@ public class Solver {
         return this.solution;
     } // sequence of boards in a shortest solution; null if unsolvable
     public static void main(String[] args) {
+        
+        // create initial board from file
+        In in = new In(args[0]);
+        int n = in.readInt();
+        int[][] blocks = new int[n][n];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+            blocks[i][j] = in.readInt();
+        Board initial = new Board(blocks);
+        
+        // solve the puzzle
+        Solver solver = new Solver(initial);
+        
+        // print solution to standard output
+        if (!solver.isSolvable())
+            StdOut.println("No solution possible");
+        else {
+            StdOut.println("Minimum number of moves = " + solver.moves());
+            for (Board board : solver.solution())
+                StdOut.println(board);
+        }
     } // solve a slider puzzle (given below)
     
 }

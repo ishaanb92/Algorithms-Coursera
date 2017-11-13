@@ -99,7 +99,7 @@ public class Board {
         
     } // does this blocks equal y?
     
-    public Iterable<Board> neighbours() {
+    public Iterable<Board> neighbors() {
         // Find the blank spot
         int blankRow = -1, blankCol = -1;
         for (int i = 0; i < dim; i++) {
@@ -111,28 +111,28 @@ public class Board {
                 }
             }
         }
-        ArrayList<Board> neighbours = new ArrayList<Board>();
+        ArrayList<Board> neighbors = new ArrayList<Board>();
         if (blankRow > 0) {
-            Board neighbour = new Board(this.blocks);
-            neighbour.swap(blankRow,blankCol,blankRow-1,blankCol);
-            neighbours.add(neighbour);
+            Board neighbor = new Board(this.blocks);
+            neighbor.swap(blankRow,blankCol,blankRow-1,blankCol);
+            neighbors.add(neighbor);
         }
         if (blankRow < dim - 1) {
-            Board neighbour = new Board(this.blocks);
-            neighbour.swap(blankRow,blankCol,blankRow+1,blankCol);
-            neighbours.add(neighbour);
+            Board neighbor = new Board(this.blocks);
+            neighbor.swap(blankRow,blankCol,blankRow+1,blankCol);
+            neighbors.add(neighbor);
         }
         if (blankCol > 0) {
-            Board neighbour = new Board(this.blocks);
-            neighbour.swap(blankRow,blankCol,blankRow,blankCol-1);
-            neighbours.add(neighbour);
+            Board neighbor = new Board(this.blocks);
+            neighbor.swap(blankRow,blankCol,blankRow,blankCol-1);
+            neighbors.add(neighbor);
         }
         if (blankCol < dim - 1) {
-            Board neighbour = new Board(this.blocks);
-            neighbour.swap(blankRow,blankCol,blankRow,blankCol+1);
-            neighbours.add(neighbour);    
+            Board neighbor = new Board(this.blocks);
+            neighbor.swap(blankRow,blankCol,blankRow,blankCol+1);
+            neighbors.add(neighbor);    
         }
-        return neighbours;    
+        return neighbors;    
     }
     
     private void swap (int i, int j, int k, int l) {
@@ -168,8 +168,8 @@ public class Board {
         Board initial = new Board(blocks);
         System.out.println(initial.toString());
         
-        // Test neighbours
-        for (Board b : initial.neighbours())
+        // Test neighbors
+        for (Board b : initial.neighbors())
             System.out.println(b.toString());
     }
     
