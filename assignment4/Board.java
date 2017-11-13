@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import edu.princeton.cs.algs4.In;
 
 public class Board {
     
@@ -98,7 +99,7 @@ public class Board {
         
     } // does this blocks equal y?
     
-    public Iterable<Board> neighbors() {
+    public Iterable<Board> neighbours() {
         // Find the blank spot
         int blankRow = -1, blankCol = -1;
         for (int i = 0; i < dim; i++) {
@@ -141,10 +142,35 @@ public class Board {
     }
     
     public String toString() {
-        return (Arrays.deepToString(this.blocks));
+        StringBuilder sb = new StringBuilder();
+        sb.append(dim).append('\n');
+        for (int i = 0; i < dim; i++) {
+            for (int j = 0; j < dim; j++)
+                sb.append(' ').append(blocks[i][j]).append(' ');
+            sb.append('\n');
+        }
+        return sb.toString();
+        
     } // string representation of this blocks (in the output format specified below)
 
     public static void main(String[] args) {
-    } // unit tests (not graded)
+        // create initial board from file
+        In in = new In(args[0]);
+        int n = in.readInt();
+        int[][] blocks = new int[n][n];
+        
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                blocks[i][j] = in.readInt();
+            }
+        }
+        
+        Board initial = new Board(blocks);
+        System.out.println(initial.toString());
+        
+        // Test neighbours
+        for (Board b : initial.neighbours())
+            System.out.println(b.toString());
+    }
     
 }
